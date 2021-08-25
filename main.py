@@ -8,10 +8,8 @@ def slide(value):
     R=r_Scale.get()
     G=g_Scale.get()
     B=b_Scale.get()
-    print(f'{R},{G},{B}')
     hex = "#%02x%02x%02x" % (R, G, B)
     rgb = f'{R},{G},{B}'
-    print(f"{rgb}, {hex}")
     colorLabel.config(bg=hex)
     hex_entry.delete(0, END)
     hex_entry.insert(0, hex)
