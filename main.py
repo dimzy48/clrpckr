@@ -1,28 +1,35 @@
 from tkinter import * 
-from pynput import keyboard
-from pynput import mouse
-import pynput
+from pynput import keyboard, mouse
 import pyperclip
-import sys
 import os
-
+import picker
 
 def slide(value):
     R=r_Scale.get()
     G=g_Scale.get()
     B=b_Scale.get()
-
-    rgb = f'{R},{G},{B}'
-
+    print(f'{R},{G},{B}')
     hex = "#%02x%02x%02x" % (R, G, B)
+    rgb = f'{R},{G},{B}'
+    print(f"{rgb}, {hex}")
     colorLabel.config(bg=hex)
-
     hex_entry.delete(0, END)
     hex_entry.insert(0, hex)
-
     rgb_entry.delete(0, END)
     rgb_entry.insert(0, rgb)
 
+# def slide(red,green,blue):
+#     R=red
+#     G=green
+#     B=blue
+#     rgb = f'{R},{G},{B}'
+#     hex = "#%02x%02x%02x" % (R, G, B)
+#     print(f"{rgb}, {hex}")
+#     colorLabel.config(bg=hex)
+#     hex_entry.delete(0, END)
+#     hex_entry.insert(0, hex)
+#     rgb_entry.delete(0, END)
+#     rgb_entry.insert(0, rgb)
 
 def hex_copy():
     pyperclip.copy(hex_entry.get())
@@ -31,7 +38,10 @@ def rgb_copy():
     pyperclip.copy(rgb_entry.get())
 
 def realtime():
-    os.system('picker.py')
+    with keyboard.Listener(on_release = picker.onRel) as ky:
+        with mouse.Listener(on_click = picker.onClick) as ms:
+            ky.join()
+            ms.join()
 
 root = Tk()
 root.config(bg='#6B8790')
@@ -73,7 +83,6 @@ hex_entry = Entry(my_frame, width=12, font=('arial', 10))
 hex_entry.grid(row=0,column=1,padx=5)
 hex_entry.insert(END, '#000000')
 
-
 copyButton1=Button(my_frame,text='Copy', font=('arial', 10, 'bold'),command=hex_copy)
 copyButton1.grid(row=1,columnspan=2,pady=7)
 
@@ -83,7 +92,6 @@ rbg_label.grid(row=2,column=0)
 rgb_entry = Entry(my_frame, width=12, font=('arial', 10))
 rgb_entry.grid(row=2,column=1,padx=5)
 rgb_entry.insert(END,'0,0,0')
-
 
 copyButton2=Button(my_frame,text='Copy', font=('arial', 10, 'bold'),command=rgb_copy)
 copyButton2.grid(row=3,columnspan=2,pady=7)
