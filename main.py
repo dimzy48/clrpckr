@@ -8,19 +8,6 @@ class MyException(Exception):
     pass
 
 
-# def slide(value):
-#     R = r_Scale.get()
-#     G = g_Scale.get()
-#     B = b_Scale.get()
-#     hex = "#%02x%02x%02x" % (R, G, B)
-#     rgb = f'{R},{G},{B}'
-#     colorLabel.config(bg=hex)
-#     hex_entry.delete(0, END)
-#     hex_entry.insert(0, hex)
-#     rgb_entry.delete(0, END)
-#     rgb_entry.insert(0, rgb)
-
-
 def slide(value):
     R = r_Scale.get()
     G = g_Scale.get()
@@ -48,17 +35,6 @@ def rgb_copy():
 
 def on_click(x, y, button, pressed):
     # Mouse Listen
-    valRGB = (0, 0, 0)
-    valHEX = "#000000"
-    # if pressed and button == mouse.Button.left:
-    #     valRGB = picker.getRGB(x, y)
-    #     valHEX = f'#{picker.getHex(valRGB)}'
-    #     print([valRGB, valHEX])
-    #     insertData(valRGB, valHEX)
-    #     r_Scale.set(valRGB[0])
-    #     g_Scale.set(valRGB[1])
-    #     b_Scale.set(valRGB[2])
-
     if pressed and button == mouse.Button.left:
         valRGB = picker.getRGB(x, y)
         valHEX = f'#{picker.getHex(valRGB)}'
@@ -66,15 +42,12 @@ def on_click(x, y, button, pressed):
         r_Scale.set(valRGB[0])
         g_Scale.set(valRGB[1])
         b_Scale.set(valRGB[2])
+    else:
+        raise MyException([pressed,button])
 
 
 def on_release(key):
     # Keyboard Listener
-    # if key == keyboard.Key.esc:
-    #     # ms.stop()
-    #     mouseListen.stop()
-    #     return False
-
     if key == keyboard.Key.esc:
         raise MyException(key)
 
