@@ -4,12 +4,33 @@ import pyperclip
 import picker
 
 
+class MyException(Exception):
+    pass
+
+
+# def slide(value):
+#     R = r_Scale.get()
+#     G = g_Scale.get()
+#     B = b_Scale.get()
+#     hex = "#%02x%02x%02x" % (R, G, B)
+#     rgb = f'{R},{G},{B}'
+#     colorLabel.config(bg=hex)
+#     hex_entry.delete(0, END)
+#     hex_entry.insert(0, hex)
+#     rgb_entry.delete(0, END)
+#     rgb_entry.insert(0, rgb)
+
+
 def slide(value):
     R = r_Scale.get()
     G = g_Scale.get()
     B = b_Scale.get()
     hex = "#%02x%02x%02x" % (R, G, B)
     rgb = f'{R},{G},{B}'
+    insertData(rgb, hex)
+
+
+def insertData(rgb, hex):
     colorLabel.config(bg=hex)
     hex_entry.delete(0, END)
     hex_entry.insert(0, hex)
@@ -27,30 +48,45 @@ def rgb_copy():
 
 def on_click(x, y, button, pressed):
     # Mouse Listen
+    valRGB = (0, 0, 0)
+    valHEX = "#000000"
+    # if pressed and button == mouse.Button.left:
+    #     valRGB = picker.getRGB(x, y)
+    #     valHEX = f'#{picker.getHex(valRGB)}'
+    #     print([valRGB, valHEX])
+    #     insertData(valRGB, valHEX)
+    #     r_Scale.set(valRGB[0])
+    #     g_Scale.set(valRGB[1])
+    #     b_Scale.set(valRGB[2])
+
     if pressed and button == mouse.Button.left:
         valRGB = picker.getRGB(x, y)
         valHEX = f'#{picker.getHex(valRGB)}'
-
-    colorLabel.config(bg=valHEX)
-    r_Scale.set(valRGB[0])
-    g_Scale.set(valRGB[1])
-    b_Scale.set(valRGB[2])
-    print([valRGB, valHEX])
+        insertData(valRGB, valHEX)
+        r_Scale.set(valRGB[0])
+        g_Scale.set(valRGB[1])
+        b_Scale.set(valRGB[2])
 
 
 def on_release(key):
     # Keyboard Listener
+    # if key == keyboard.Key.esc:
+    #     # ms.stop()
+    #     mouseListen.stop()
+    #     return False
+
     if key == keyboard.Key.esc:
-        ms.stop()
-        return False
+        raise MyException(key)
 
 
 def realtime():
     with keyboard.Listener(on_release=on_release) as ky:
         with mouse.Listener(on_click=on_click) as ms:
-            # colorLabel.config(bg=f"#{}")
-            ky.join()
-            ms.join()
+            try:
+                ky.join()
+                ms.join()
+            except MyException as e:
+                print(e.args[0])
 
 
 root = Tk()
